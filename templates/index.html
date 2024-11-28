@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST NN Tester</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<style>
+    .width-restrict {
+        width: 60rem;
+        max-width: 90vw;
+        margin: auto;
+    }
+    #image {
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: repeat(28, 1fr);
+        grid-template-rows: repeat(28, 2fr);
+    }
+</style>
+<body>
+
+    <nav class="bg-primary mb-4">
+        <div class="width-restrict row gap-4 py-3 align-items-center">
+            <div class="col fs-3 px-0">MNIST Neural Network Tester</div>
+            <a href="" class="col-auto btn btn-outline-light">GitHub</a>
+        </div>
+    </nav>
+
+    <main class="width-restrict">
+    
+        <section class="bg-body-tertiary border border-light-subtle p-4 rounded-4 mb-4">
+
+            <form action="/generateParameters" method="POST">
+
+                <label for="iterations" class="form-label">Iterations:</label>
+                <input type="number" id="iterations" name="iterations" class="form-control" required>
+                <label for="alpha" class="form-label">Learning rate:</label>
+                <input type="number" id="alpha" name="alpha" class="form-control" required>
+
+                <hr>
+
+                <div class="form-check">
+                    <input type="radio" id="ReLU" name="activationFunction" value="ReLU" class="form-check-input" checked>
+                    <label for="ReLU" class="form-check-label">ReLU</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="leakyReLU" name="activationFunction" value="leakyReLU" class="form-check-input">
+                    <label for="leakyReLU" class="form-check-label">Leaky ReLU</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="sigmoid" name="activationFunction" value="sigmoid" class="form-check-input">
+                    <label for="sigmoid" class="form-check-label">Sigmoid</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="tanh" name="activationFunction" value="tanh" class="form-check-input">
+                    <label for="tanh" class="form-check-label">Tanh</label>
+                </div>
+
+                <hr>
+
+                <div>
+                    <button class="btn btn-primary" onclick="createNodeInputs(event, 1)">Add layer</button>
+                    <button class="btn btn-primary" onclick="createNodeInputs(event, -1)">Delete layer</button>
+                    <div>(max 10 for performance)</div>
+                </div>
+
+                <hr>
+
+                <div id="layers-inputs"></div>
+
+                <hr>
+
+                <input type="submit" class="btn btn-primary">
+
+                <hr>
+
+                <div>Iteration x/total</div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 25%;"></div>
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="bg-body-tertiary border border-light-subtle p-4 rounded-4 mb-4" id="results">
+
+            <div class="row">
+
+                <div class="col">
+
+                    <div>
+                        <div>Testing data accuracy: <span id="current-testing-data-accuracy"></span></div>
+                        <div>Image index: <span id="current-image-index"></span></div>
+                        <div>Actual value: <span id="current-image-actual"></span></div>
+                        <div>Predicted value: <span id="current-image-prediction"></span></div>
+                    </div>
+
+                    <hr>
+
+                    <div>
+                        <button class="btn btn-primary" onclick="changeImage(event, -1)">Prev</button>
+                        <button class="btn btn-primary" onclick="changeImage(event, 1)">Next</button>
+                    </div>
+
+                    <hr>
+
+                </div>
+
+                <div class="col-sm">
+                    <div id="image"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="records"></section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    
+</body>
+</html>
